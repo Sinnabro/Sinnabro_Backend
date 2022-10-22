@@ -3,7 +3,7 @@ const { sequelize } = require("./models")
 const app = express();
 const router = require("./routes/index");
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 require("dotenv").config();
 
 app.use(express.json());

@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define("user", {
-        user_id: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
