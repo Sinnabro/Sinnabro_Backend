@@ -9,6 +9,8 @@ require("dotenv").config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.set("jwt-secret", process.env.SECRET);
+
 app.use("/", router);
 
 app.listen(port, () => {
