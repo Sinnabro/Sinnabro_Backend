@@ -55,7 +55,7 @@ const login = async(req, res) => {
 
     try {
         const user = await User.findOne({
-            where: { email: email }
+            where: { email }
         });
 
         if (user.password === password) {
