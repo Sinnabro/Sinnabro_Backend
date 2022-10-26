@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const tokenMiddleware = async(req, res, next) => {
     const token = await req.headers["access-token"];
 
-    if (!token ) {
+    if (!token) {
         res.status(401).json({
             message: "로그인이 필요합니다."
         });

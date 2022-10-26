@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 const signup = async(req, res) => {
     const { email, name, password } = req.body;
@@ -68,7 +69,12 @@ const login = async(req, res) => {
             {
                 expiresIn: "1h"
             });
-            res.status(200).json({
+
+            await user.update({
+                token: accessToken
+            });
+            
+            return res.status(200).json({
                 message: "로그인이 완료되었습니다.",
                 accessToken
             });
@@ -85,8 +91,55 @@ const login = async(req, res) => {
     }
 };
 
+const deleteUser = async(req, res) => {
+    const { email, password } = req.body;
+    const token = await req.headers["access-token"];
+    const decodedEmail = req.decoded.email;
+
+    const user = await User.findOne({
+        where: { email: decodedEmail }
+    });
+
+    const emailUser = await User.findOne({
+        where: { email }
+    });
+    console.log(user);
+
+    try {
+        if (user.email !== email) {
+            if(!emailUser) {
+                return res.status(404).json({
+                    message: "존재하지 않는 회원입니다."
+                });
+            }
+            throw Error;
+    
+        } else if (user.password !== password) {
+            return res.status(400).json({
+                message: "올바르지 않은 비밀번호입니다."
+            });
+        } else if (token !== user.token) {
+            return res.status(403).json({
+                message: "권한이 없습니다."
+            });
+        } else {
+            await user.destroy();
+
+            return res.status(200).json({
+                message: "회원 탈퇴가 완료되었습니다."
+            });
+        }
+    } catch(err) {
+        console.error(err);
+        return res.status(400).json({
+            message: "잘못된 요청입니다."
+        });
+    }
+};
+
 module.exports = {
     signup,
     namecheck,
-    login
+    login,
+    deleteUser
 };
