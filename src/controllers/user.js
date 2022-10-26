@@ -137,9 +137,46 @@ const deleteUser = async(req, res) => {
     }
 };
 
+const updatePassword = async(req, res) => {
+    const { password, new_password } = req.body;
+    const decoded = req.decoded.id;
+
+    try {
+        const user = await User.findOne({
+            where: {
+                id: decoded
+            }
+        });
+
+        if (user.password !== password) {
+            res.status(400).json({
+                message: "현재 비밀번호가 올바르지 않습니다."
+            });
+        } else if (password === new_password) {
+            res.status(400).json({
+                message: "현재 비밀번호와 같지 않도록 수정하세요."
+            });
+        } else {
+            await user.update({
+                password : new_password
+            });
+
+            res.status(200).json({
+                message: "비밀번호가 수정되었습니다."
+            });
+        }
+    } catch(err) {
+        res.status(400).json({
+            message: "잘못된 요청입니다."
+        });
+        console.error(err);
+    }
+};
+
 module.exports = {
     signup,
     namecheck,
     login,
-    deleteUser
+    deleteUser,
+    updatePassword
 };
