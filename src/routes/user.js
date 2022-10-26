@@ -8,5 +8,6 @@ router.post("/signup", controller.signup);
 router.post("/namecheck", controller.namecheck);
 router.get("/login", controller.login);
 router.delete("/", AuthMiddleware, controller.deleteUser);
+router.patch("/password", AuthMiddleware, controller.updatePassword);
 
 module.exports = router;
