@@ -7,11 +7,18 @@ const sequelize = new Sequelize({...config, sync: false});
 
 db.User = require("./user")(sequelize, Sequelize);
 db.Todo = require("./todo")(sequelize, Sequelize);
+db.Comment = require("./comment")(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.User.hasMany(db.Todo, {foriegnKey: "writer", targetKey: "id"});
-db.Todo.belongsTo(db.User, {foriegnKey: "writer"});
+db.User.hasMany(db.Todo, { foreignKey: "writer", targetKey: "id" });
+db.Todo.belongsTo(db.User, { foreignKey: "writer" });
+
+db.User.hasMany(db.Comment, { foreignKey: "user_id", targetKey: "id" });
+db.Comment.belongsTo(db.User, { foreignKey: "user_id" });
+
+db.Todo.hasMany(db.Comment, { foreignKey: "todo_id", targetKey: "id" });
+db.Comment.belongsTo(db.Todo, { foreignKey: "todo_id" });
 
 module.exports = db;
