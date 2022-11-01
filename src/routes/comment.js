@@ -5,7 +5,8 @@ const AuthMiddleware = require("../middleware/token");
 const controller = require("../controllers/comment");
 
 router.post("/:todo_id", AuthMiddleware, controller.createComment);
-router.delete("/:todo_id/:id", AuthMiddleware, controller.deleteOneComment);
+router.get("/:todo_id/comment", AuthMiddleware, controller.readAllComment);
 router.patch("/:todo_id/:id", AuthMiddleware, controller.updatecomment);
+router.delete("/:todo_id/:id", AuthMiddleware, controller.deleteOneComment);
 
 module.exports = router;

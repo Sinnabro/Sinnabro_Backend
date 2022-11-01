@@ -25,6 +25,34 @@ const createComment = async(req, res) => {
     }
 };
 
+const readAllComment = async(req, res) => {
+    const TodoId = req.params.todo_id;
+
+    try {
+        const todo = await Todo.findOne({
+            where: { id: TodoId }
+        });
+
+        const comments = await Comment.findAll({
+            where: { todo_id: TodoId}
+        });
+
+        if (!todo) {
+            return res.status(404).json({
+                message: "존재하지 않는 투두입니다."
+            });
+        } else {
+            return res.status(200).json(comments);
+        }
+    } catch(err) {
+        console.error(err);
+
+        return res.status(400).json({
+            message: "잘못된 요청입니다."
+        });
+    }
+};
+
 const updatecomment = async(req, res) => {
     const { content } = req.body;
     const TodoId = req.params.todo_id;
@@ -115,6 +143,7 @@ const deleteOneComment = async(req, res) => {
 
 module.exports = {
     createComment,
-    deleteOneComment,
-    updatecomment
+    readAllComment,
+    updatecomment,
+    deleteOneComment
 };
