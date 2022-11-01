@@ -9,5 +9,6 @@ router.post("/namecheck", controller.namecheck);
 router.post("/login", controller.login);
 router.delete("/", AuthMiddleware, controller.deleteUser);
 router.patch("/password", AuthMiddleware, controller.updatePassword);
+router.post("/email", controller.verifyEmail);
 
 module.exports = router;

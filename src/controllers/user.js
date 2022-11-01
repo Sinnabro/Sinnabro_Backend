@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
+const { Transport } = require("../config/email");
 
 const signup = async(req, res) => {
     const { email, name, password } = req.body;
@@ -172,10 +173,42 @@ const updatePassword = async(req, res) => {
     }
 };
 
+const verifyEmail = async(req, res) => {
+    const generateRandom = function(min, max) {
+        const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        return randomNumber;
+    };
+
+    const number = generateRandom(111111, 999999);
+
+    const { email } = req.body;
+
+    const mailOptions = {
+        from: process.env.USEREMAIL,
+        to: email,
+        subject: "[SINNABRO] 인증 관련 이메일입니다.",
+        text: "인증번호: " + number
+    };
+
+    await Transport.sendMail(mailOptions, (error) => {
+        if (error) {
+            res.status(400).json({
+                message: "error"
+            });
+        } else {
+            res.status(200).json({
+                message: number
+            });
+        }
+        Transport.close();
+    });
+};
+
 module.exports = {
     signup,
     namecheck,
     login,
     deleteUser,
-    updatePassword
+    updatePassword,
+    verifyEmail
 };
