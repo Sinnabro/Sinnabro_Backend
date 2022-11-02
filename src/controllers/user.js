@@ -187,7 +187,7 @@ const verifyEmail = async(req, res) => {
         from: process.env.USEREMAIL,
         to: email,
         subject: "[SINNABRO] 인증 관련 이메일입니다.",
-        text: "인증번호: " + number
+        text: "오른쪽 숫자 여섯 자리를 입력해주세요 : " + number
     };
 
     await Transport.sendMail(mailOptions, (error) => {
