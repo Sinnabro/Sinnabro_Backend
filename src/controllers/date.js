@@ -11,9 +11,9 @@ const createDate = async(req, res) => {
                 user_id: UserId
             }
         });
-        
+
         if (user) {
-            return res.status(400).json({
+            return res.status(409).json({
                 message: "디데이가 이미 존재합니다."
             });
         }
