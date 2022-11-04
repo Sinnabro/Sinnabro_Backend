@@ -79,15 +79,16 @@ const login = async(req, res) => {
                 accessToken
             });
         } else {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "올바르지 않은 비밀번호입니다."
             });
         }
     } catch(err) {
-        res.status(400).json({
+        console.error(err);
+        
+        return res.status(400).json({
             message: "잘못된 요청입니다."
         });
-        console.error(err);
     }
 };
 

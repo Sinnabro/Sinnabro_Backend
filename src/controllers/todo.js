@@ -1,5 +1,4 @@
 const { Todo } = require('../models');
-const { User } = require('../models');
 
 const createTodo = async(req, res) => {
     const { sub, content, check } = req.body;
