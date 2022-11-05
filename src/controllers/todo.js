@@ -32,7 +32,7 @@ const updateTodo = async(req, res) => {
         const todo = await Todo.findOne({
             where : { id : todoId },
         });
-        if(!todoId){
+        if(!todo){
             res.status(404).json({
                 "message" : "존재하지 않는 투두입니다."
             });
