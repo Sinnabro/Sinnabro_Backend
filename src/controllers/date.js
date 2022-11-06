@@ -42,6 +42,52 @@ const createDate = async(req, res) => {
     }
 };
 
+const updateDate = async(req, res) => {
+    const DateId = req.params.id;
+    const { dayname, date } = req.body;
+    const UserId = req.decoded.id;
+
+    try {
+        const findDate = await Date.findOne({
+            where: {
+                id: DateId
+            }
+        });
+
+        if (!findDate) {
+            return res.status(404).json({
+                message: "존재하지 않는 디데이입니다."
+            });
+        } else if (findDate.user_id !== UserId) {
+            return res.status(403).json({
+                message: "디데이는 본인만 수정할 수 있습니다."
+            });
+        } else {
+            const aFewDate = moment(date);
+            const today = moment().format("YYYY-MM-DD");
+        
+            const sub = aFewDate.diff(today, 'days') + 1;
+
+            await findDate.update({
+                dayname,
+                date,
+                Dday: sub
+            });
+
+            return res.status(200).json({
+                message: "디데이가 수정되었습니다."
+            });
+        }
+
+    } catch(err) {
+        console.error(err);
+
+        return res.status(400).json({
+            message: "잘못된 요청입니다."
+        });
+    }
+};
+
 const deleteDate = async(req, res) => {
     const DateId = req.params.id;
     const UserId = req.decoded.id;
@@ -81,5 +127,6 @@ const deleteDate = async(req, res) => {
 
 module.exports = {
     createDate,
+    updateDate,
     deleteDate
 };
