@@ -80,7 +80,7 @@ const updatecomment = async(req, res) => {
                 message: "댓글은 해당 댓글의 작성자만 수정할 수 있습니다."
             });
         } else {
-            comment.update({ content });
+            await comment.update({ content });
 
             return res.status(200).json({
                 message: "댓글이 수정되었습니다."
@@ -135,7 +135,7 @@ const deleteOneComment = async(req, res) => {
         }
     } catch(err) {
         console.error(err);
-        res.status(400).json({
+        return res.status(400).json({
             message: "잘못된 요청입니다."
         });
     }
