@@ -24,6 +24,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: 0,
+        },
+        date: {
+            type: DataTypes.TEXT,
+            allowNull: false,
         }
+    },
+    {
+        sequelize,
+        timestamps: false,
+        modelName: 'Todo',
+        tableName: 'todos',
+        charset: 'utf8mb4',
+        collate: 'utf8mb4_general_ci',
     });
 };

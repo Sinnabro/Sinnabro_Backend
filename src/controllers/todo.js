@@ -1,4 +1,5 @@
 const { Todo } = require('../models');
+const moment = require('moment');
 
 const createTodo = async(req, res) => {
     const { sub, content, check } = req.body;
@@ -9,7 +10,8 @@ const createTodo = async(req, res) => {
             writer : user.id,
             sub,
             content,
-            check
+            check,
+            date: moment().format('YYYY-MM-DD'),
         });
 
         return res.status(201).json({
@@ -59,7 +61,24 @@ const updateTodo = async(req, res) => {
     };
 }
 
+const getTodo = async(req, res) => {
+    try{
+        const todo = await Todo.findAll({
+            where : {date: moment().format('YYYY-MM-DD')}
+        });
+        res.status(200).json({
+            todo,
+        })
+    }catch(err){
+        res.status(400).json({
+            "message" : "잘못된 요청입니다."
+        });
+        console.error(err);
+    }
+}
+
 module.exports = {
     createTodo,
     updateTodo,
+    getTodo,
 };
