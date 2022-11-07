@@ -42,6 +42,26 @@ const createDate = async(req, res) => {
     }
 };
 
+const readDate = async(req, res) => {
+    const UserId = req.decoded.id;
+
+    try {
+        const date = await Date.findOne({
+            where: {
+                user_id: UserId
+            }
+        });
+
+        return res.status(200).json(date);
+    } catch(err) {
+        console.error(err);
+
+        return res.status(400).json({
+            message: "잘못된 요청입니다."
+        });
+    }
+};
+
 const updateDate = async(req, res) => {
     const DateId = req.params.id;
     const { dayname, date } = req.body;
@@ -127,6 +147,7 @@ const deleteDate = async(req, res) => {
 
 module.exports = {
     createDate,
+    readDate,
     updateDate,
     deleteDate
 };
