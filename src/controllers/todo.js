@@ -77,8 +77,36 @@ const getTodo = async(req, res) => {
     }
 }
 
+const deleteTodo = async(req, res) => {
+    const todoId = req.params.todo_id;
+    const UserId = req.decoded.id;
+
+    try{
+        const todo = await Todo.findOne({
+            where : { id : todoId },
+        });
+        if(!todo){
+            return res.status(404).json({
+                "message" : "존재하지 않는 투두입니다."
+            });
+        }else if(todo.writer !== UserId){
+            return res.status(403).json({
+                "message" : "해당 투두의 작성자만 삭제 가능합니다." 
+            });
+        }else{
+            await todo.destroy();
+            return res.status(204).json();
+        }
+    }catch(err){
+        return res.status(400).json({
+            "message" : "잘못된 요청입니다."
+        })
+    }
+}
+
 module.exports = {
     createTodo,
     updateTodo,
     getTodo,
+    deleteTodo,
 };
