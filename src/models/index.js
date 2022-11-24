@@ -9,6 +9,7 @@ db.User = require("./user")(sequelize, Sequelize);
 db.Todo = require("./todo")(sequelize, Sequelize);
 db.Comment = require("./comment")(sequelize, Sequelize);
 db.Date = require("./date")(sequelize, Sequelize);
+db.Time = require('./time')(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
