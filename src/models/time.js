@@ -1,7 +1,7 @@
 const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("", {
+    return sequelize.define("time", {
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
