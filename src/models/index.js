@@ -26,7 +26,7 @@ db.Comment.belongsTo(db.Todo, { foreignKey: "todo_id" });
 db.User.hasMany(db.Date, { foreignKey: "user_id", targetKey: "id" });
 db.Date.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.User.hasMany(db.Time, { foreignKey: "user_id", targetKey: "user_id"});
+db.User.hasMany(db.Time, { foreignKey: "user_id", targetKey: "id"});
 db.Time.belongsTo(db.User, { foreignKey: "user_id"});
 
 module.exports = db;
