@@ -20,8 +20,8 @@ db.Todo.belongsTo(db.User, { foreignKey: "writer" });
 db.User.hasMany(db.Comment, { foreignKey: "user_id", targetKey: "id" });
 db.Comment.belongsTo(db.User, { foreignKey: "user_id" });
 
-db.Todo.hasMany(db.Comment, { foreignKey: "todo_id", targetKey: "id" });
-db.Comment.belongsTo(db.Todo, { foreignKey: "todo_id" });
+db.Time.hasMany(db.Comment, { foreignKey: "time_id", targetKey: "id" });
+db.Comment.belongsTo(db.Time, { foreignKey: "time_id" });
 
 db.User.hasMany(db.Date, { foreignKey: "user_id", targetKey: "id" });
 db.Date.belongsTo(db.User, { foreignKey: "user_id" });

@@ -10,7 +10,7 @@ const Time = require('./time');
 
 router.use("/user", User);
 router.use("/todo", Todo);
-router.use("/todo", Comment);
+router.use("/time", Comment);
 router.use("/date", Date);
 router.use("/list", List);
 router.use('/time', Time);
