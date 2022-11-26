@@ -2,10 +2,15 @@ const sequelize = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define("time", {
-        user_id: {
+        id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
+        },
+        user_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
         date: {
             type: DataTypes.TEXT,
