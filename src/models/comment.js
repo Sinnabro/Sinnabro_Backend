@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             autoIncrement: true
         },
-        todo_id: {
+        time_id: {
             type: DataTypes.INTEGER,
             allowNull: false
         },

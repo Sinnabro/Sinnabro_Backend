@@ -1,15 +1,14 @@
-const { Comment } = require("../models");
-const { Todo } = require("../models");
+const { Comment, Time } = require("../models");
 
 const createComment = async(req, res) => {
     const { content } = req.body;
-    const TodoId = req.params.todo_id;
+    const TimeId = req.params.time_id;
     const user = req.decoded;
 
     try {
         await Comment.create({
             user_id: user.id,
-            todo_id: TodoId,
+            time_id: TimeId,
             name: user.name,
             content
         });
@@ -26,20 +25,20 @@ const createComment = async(req, res) => {
 };
 
 const readAllComment = async(req, res) => {
-    const TodoId = req.params.todo_id;
+    const TimeId = req.params.time_id;
 
     try {
-        const todo = await Todo.findOne({
-            where: { id: TodoId }
+        const time = await Time.findOne({
+            where: { id: TimeId }
         });
 
         const comments = await Comment.findAll({
-            where: { todo_id: TodoId}
+            where: { time_id: TimeId}
         });
 
-        if (!todo) {
+        if (!time) {
             return res.status(404).json({
-                message: "존재하지 않는 투두입니다."
+                message: "존재하지 않는 타임테이블입니다."
             });
         } else {
             return res.status(200).json(comments);
@@ -55,21 +54,21 @@ const readAllComment = async(req, res) => {
 
 const updatecomment = async(req, res) => {
     const { content } = req.body;
-    const TodoId = req.params.todo_id;
+    const TimeId = req.params.time_id;
     const CommentId = req.params.id;
     const UserId = req.decoded.id;
 
     try {
-        const todo = await Todo.findOne({
-            where: { id: TodoId }
+        const time = await Time.findOne({
+            where: { id: TimeId }
         });
         const comment = await Comment.findOne({
             where: { id: CommentId }
         });
 
-        if (!todo) {
+        if (!time) {
             return res.status(404).json({
-                message: "존재하지 않는 투두입니다."
+                message: "존재하지 않는 타임테이블입니다."
             });
         } else if (!comment) {
             return res.status(404).json({
@@ -95,14 +94,14 @@ const updatecomment = async(req, res) => {
 };
 
 const deleteOneComment = async(req, res) => {
-    const TodoId = req.params.todo_id;
+    const TimeId = req.params.time_id;
     const CommentId = req.params.id;
     const UserId = req.decoded.id;
 
     try {
-        const todo = await Todo.findOne({
+        const time = await Time.findOne({
             where: {
-                id: TodoId
+                id: TimeId
             }
         });
         const comment = await Comment.findOne({
@@ -111,9 +110,9 @@ const deleteOneComment = async(req, res) => {
             }
         });
 
-        if (!todo) {
+        if (!time) {
             return res.status(404).json({
-                message: "존재하지 않는 투두입니다."
+                message: "존재하지 않는 타임테이블입니다."
             });
         } else if (!comment) {
             return res.status(404).json({
