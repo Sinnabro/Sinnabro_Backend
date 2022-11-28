@@ -34,13 +34,14 @@ const createTime = async(req, res) => {
     }
 };
 const getTime = async(req, res) => {
+    const date = req.body.date;
     const user = req.decoded.id;
     
     try{
         const times = await Time.findAll({
             where: {
                 user_id: user,
-                date: moment().format('YYYY-MM-DD'),
+                date,
             }
         })
         if(!times){
