@@ -6,6 +6,16 @@ const signup = async(req, res) => {
     const { email, name, password } = req.body;
 
     try {
+        const useremail = await User.findOne({
+          where: { email }
+        });
+
+        if (useremail) {
+          return res.status(409).json({
+            message: "이미 존재하는 회원입니다."
+          });
+        }
+
         await User.create({
             email,
             name,
