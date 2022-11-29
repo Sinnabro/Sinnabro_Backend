@@ -34,16 +34,17 @@ const updateTodo = async(req, res) => {
         const todo = await Todo.findOne({
             where : { id : todoId },
         });
-        if(!todo){
+
+        if (!todo) {
             res.status(404).json({
                 "message" : "존재하지 않는 투두입니다."
             });
             console.error(err);
-        }else if(todo.writer !== UserId){
+        } else if (todo.writer !== UserId) {
             res.status(403).json({
                 "message" : "투두는 해당 투두의 작성자만 수정할 수 있습니다."
             });
-        }else{
+        } else {
             await todo.update({
                 sub,
                 content,
