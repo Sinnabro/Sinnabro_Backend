@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 const { Transport } = require("../config/email");
+const moment = require("moment");
 
 const signup = async(req, res) => {
     const { email, name, password } = req.body;
@@ -167,14 +168,15 @@ const updatePassword = async(req, res) => {
             });
         }
     } catch(err) {
-        res.status(400).json({
+        console.error(err);
+
+        return res.status(400).json({
             message: "잘못된 요청입니다."
         });
-        console.error(err);
     }
 };
 
-const verifyEmail = async(req, res) => {
+const sendEmail = async(req, res) => {
     const generateRandom = function(min, max) {
         const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
         return randomNumber;
@@ -205,11 +207,35 @@ const verifyEmail = async(req, res) => {
     });
 };
 
+const mypage = async(req, res) => {
+    const UserId = req.decoded.id;
+
+    try {
+
+      const user = await User.findAll({
+        attributes: ["name", "email"],
+        where: { id: UserId }
+      });
+
+      return res.status(200).json({
+        message: "마이페이지를 조회합니다.", user
+      });
+
+    } catch(err) {
+      console.error(err);
+
+      return res.status(400).json({
+        message: "잘못된 요청입니다."
+      });
+    }
+};
+
 module.exports = {
     signup,
     namecheck,
     login,
     deleteUser,
     updatePassword,
-    verifyEmail
+    sendEmail,
+    mypage
 };
