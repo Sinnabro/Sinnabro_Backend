@@ -120,10 +120,10 @@ const deleteOneComment = async(req, res) => {
             });
         }
 
-        if (comment.user_id !== UserId) {
+        if (comment.user_id !== UserId && time.user_id !== UserId) {
 
             return res.status(403).json({
-                message: "댓글은 해당 댓글의 작성자만 삭제할 수 있습니다."
+                message: "댓글은 해당 댓글의 작성자 또는 해당 플래너 작성자만 삭제할 수 있습니다."
             });
         } else {
             await comment.destroy();
