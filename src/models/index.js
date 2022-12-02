@@ -10,6 +10,7 @@ db.Todo = require("./todo")(sequelize, Sequelize);
 db.Comment = require("./comment")(sequelize, Sequelize);
 db.Date = require("./date")(sequelize, Sequelize);
 db.Time = require('./time')(sequelize, Sequelize);
+db.Like = require('./like')(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
@@ -28,5 +29,11 @@ db.Date.belongsTo(db.User, { foreignKey: "user_id" });
 
 db.User.hasMany(db.Time, { foreignKey: "user_id", targetKey: "id"});
 db.Time.belongsTo(db.User, { foreignKey: "user_id"});
+
+db.User.hasMany(db.Like, { foreignKey: "user_id", targetKey: "id"});
+db.Like.belongsTo(db.User, { foreignKey: "user_id"});
+
+db.Time.hasMany(db.Like, { foreignKey: "time_id", targetKey: "id"});
+db.Like.belongsTo(db.Time, { foreignKey: "time_id"});
 
 module.exports = db;
