@@ -9,6 +9,7 @@ router.post("/namecheck", controller.namecheck);
 router.post("/login", controller.login);
 router.delete("/", AuthMiddleware, controller.deleteUser);
 router.patch("/password", AuthMiddleware, controller.updatePassword);
+router.patch("/find/:email", controller.findPassword);
 router.post("/email", controller.sendEmail);
 router.post("/verify/:email", controller.verifyEmail);
 router.get("/mypage", AuthMiddleware, controller.mypage);
