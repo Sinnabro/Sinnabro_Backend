@@ -186,6 +186,37 @@ const updatePassword = async (req, res) => {
   }
 };
 
+const findPassword = async (req, res) => {
+  const UserEmail = req.params.email;
+  const { new_password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      where: { email: UserEmail },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "존재하지 않은 회원입니다.",
+      });
+    }
+
+    await user.update({
+      password: new_password,
+    });
+
+    return res.status(200).json({
+      message: "비밀번호가 수정되었습니다.",
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(400).json({
+      message: "잘못된 요청입니다.",
+    });
+  }
+};
+
 const sendEmail = async (req, res) => {
   const generateRandom = function (min, max) {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -283,6 +314,7 @@ module.exports = {
   login,
   deleteUser,
   updatePassword,
+  findPassword,
   sendEmail,
   verifyEmail,
   mypage,
