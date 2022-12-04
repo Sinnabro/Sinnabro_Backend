@@ -1,7 +1,6 @@
-const { User } = require("../models");
+const { User, Verify } = require("../models");
 const jwt = require("jsonwebtoken");
 const { Transport } = require("../config/email");
-const moment = require("moment");
 
 const signup = async (req, res) => {
   const { email, name, password } = req.body;
@@ -197,12 +196,9 @@ const sendEmail = async (req, res) => {
 
   const { email } = req.body;
 
-  const user = await User.findOne({
-    where: { email },
-  });
-
-  await user.update({
-    verify_code: number,
+  await Verify.create({
+    email,
+    code: number,
   });
 
   const mailOptions = {
@@ -231,17 +227,17 @@ const verifyEmail = async (req, res) => {
   const { code } = req.body;
 
   try {
-    const user = await User.findOne({
+    const user = await Verify.findOne({
       where: { email: useremail },
     });
 
-    if (!useremail) {
+    if (!user) {
       return res.status(404).json({
         message: "해당 이메일이 존재하지 않습니다.",
       });
     }
 
-    if (user.verify_code !== code) {
+    if (user.code !== code) {
       return res.status(400).json({
         message: "인증번호가 알맞지 않습니다.",
       });

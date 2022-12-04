@@ -26,9 +26,5 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(),
       allowNull: true,
     },
-    verify_code: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   });
 };
