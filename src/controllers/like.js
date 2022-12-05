@@ -11,10 +11,11 @@ const getLike = async(req, res) => {
                 time_id: timeId,
             }
         });
-        const count = await sequelize.query(
-            `SELECT COUNT(CASE WHEN time_id='${timeId}' THEN 1 END) AS COUNT_LIKE FROM likes;`,
-            {type: QueryTypes.SELECT}
-        )
+        const count = await Like.count({
+            where : {
+                time_id: timeId
+            }
+        })
         return res.status(200).json({
             "message" : "좋아요 수를 조회합니다.",
             count,
