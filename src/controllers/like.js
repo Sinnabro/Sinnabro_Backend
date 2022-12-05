@@ -59,7 +59,36 @@ const createLike = async(req, res) => {
     }
 }
 
+const deleteLike = async(req, res) =>{
+    try{
+        const { timeId } = req.params;
+        const user = req.decoded.id;
+        if(!timeId) return res.status(404).json({
+            "message" : "존재하지 않는 타임테이블입니다.",
+        })
+        const like = await Like.findOne({
+            where : {
+                time_id: timeId,
+                user_id: user,
+            }
+        })
+        if(!like) return res.status(404).json({
+            "message" : "좋아요를 찾을 수 없습니다.",
+        })
+        else{
+            await like.destroy();
+            return res.status(204).json();
+        }
+    }catch(error){
+        console.error(err);
+        return res.status(400).json({
+            "message" : "잘못된 요청입니다.",
+        })
+    }
+}
+
 module.exports = {
     getLike,
     createLike,
+    deleteLike,
 };
