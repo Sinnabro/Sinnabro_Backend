@@ -18,7 +18,7 @@ const getLike = async(req, res) => {
         }
 
         const count = await sequelize.query(
-            `SELECT COUNT(case when 'time_id'=${timeId} then 1 end) FROM likes;`,
+            `SELECT COUNT(CASE WHEN time_id='${timeId}' THEN 1 END) AS COUNT_LIKE FROM likes;`,
             {type: QueryTypes.SELECT}
         )
         return res.status(200).json({
