@@ -32,7 +32,7 @@ const getLike = async(req, res) => {
     }
 }
 
-const writeLike = async(req, res) => {
+const CDLike = async(req, res) => {
     const { timeId } = req.params;
     const user = req.decoded.id;
     try{        
@@ -63,38 +63,7 @@ const writeLike = async(req, res) => {
     }
 }
 
-const cancelLike = async(req, res) => {
-    const { timeId } = req.params;
-    const user = req.decoded.id;
-    try{
-        if(!timeId) return res.status(404).json({
-            "message" : "존재하지 않는 타임테이블입니다.",
-        })
-        const like = await Like.findOne({
-            where: {
-                time_id: timeId,
-                user_id : user,
-            }
-        })
-        if(!like) {
-            console.log("There's no Like!");
-            createLike(req, res);
-            return res.status(200).json({
-                "message" : "좋아요를 생성했습니다.",
-            })
-        }
-        deleteLike(req, res)
-        return res.status(204).json();
-    }catch(err){
-        console.error(err);
-        return res.status(400).json({
-            "message" : "잘못된 요청입니다.",
-        })
-    }
-}
-
 module.exports = {
     getLike,
-    writeLike,
-    cancelLike,
+    CDLike,
 };
