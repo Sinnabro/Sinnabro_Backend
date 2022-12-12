@@ -5,7 +5,6 @@ const AuthMiddleware = require("../middleware/token");
 const controller = require('../controllers/like');
 
 router.get('/:timeId', AuthMiddleware, controller.getLike);
-router.post('/:timeId', AuthMiddleware, controller.createLike);
-router.delete('/:timeId', AuthMiddleware, controller.deleteLike);
+router.post('/:timeId', AuthMiddleware, controller.CDLike);
 
 module.exports = router;

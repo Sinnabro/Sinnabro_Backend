@@ -1,16 +1,20 @@
 const { Like, Time } = require('../models');
 const { QueryTypes } = require('sequelize');
 const { sequelize } = require('../models/index');
+const { createLike, deleteLike } = require('../middleware/like');
 
 const getLike = async(req, res) => {
     const { timeId } = req.params;
     const user = req.decoded.id;
     try{
-        const like = await Like.findAll({
+        const like = await Like.findOne({
             where:{
                 time_id: timeId,
             }
         });
+        if(!like) return res.status(404).json({
+            "message" : "좋아요가 존재하지 않습니다.",
+        })
         const count = await Like.count({
             where : {
                 time_id: timeId
@@ -28,10 +32,10 @@ const getLike = async(req, res) => {
     }
 }
 
-const createLike = async(req, res) => {
+const CDLike = async(req, res) => {
     const { timeId } = req.params;
     const user = req.decoded.id;
-    try{
+    try{        
         if(!timeId) return res.status(404).json({
             "message" : "존재하지 않는 타임테이블입니다.",
         })
@@ -41,45 +45,17 @@ const createLike = async(req, res) => {
                 user_id : user,
             }
         })
-        if(having) return res.status(409).json({
-            "message" : "이미 좋아요를 생성했습니다.",
-        })
-        const like = await Like.create({
-            time_id : timeId,
-            user_id : user,
-        });
+        if(having){
+            deleteLike(req, res);
+            return res.status(204).json({
+                "message" : "좋아요를 취소했습니다.",
+            })
+        }
+        else createLike(req, res);
         return res.status(200).json({
-            "message" : "좋아요가 생성되었습니다.",
+            "message" : "좋아요를 생성했습니다."
         })
     }catch(err){
-        console.error(err);
-        return res.status(400).json({
-            "message" : "잘못된 요청입니다.",
-        });
-    }
-}
-
-const deleteLike = async(req, res) =>{
-    try{
-        const { timeId } = req.params;
-        const user = req.decoded.id;
-        if(!timeId) return res.status(404).json({
-            "message" : "존재하지 않는 타임테이블입니다.",
-        })
-        const like = await Like.findOne({
-            where : {
-                time_id: timeId,
-                user_id: user,
-            }
-        })
-        if(!like) return res.status(404).json({
-            "message" : "좋아요를 찾을 수 없습니다.",
-        })
-        else{
-            await like.destroy();
-            return res.status(204).json();
-        }
-    }catch(error){
         console.error(err);
         return res.status(400).json({
             "message" : "잘못된 요청입니다.",
@@ -89,6 +65,5 @@ const deleteLike = async(req, res) =>{
 
 module.exports = {
     getLike,
-    createLike,
-    deleteLike,
+    CDLike,
 };
