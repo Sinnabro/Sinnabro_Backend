@@ -19,7 +19,6 @@ const createLike = async(req, res) => {
 }
 
 const deleteLike = async(req, res) =>{
-    console.log(`I'm testing Create!`)
     const { timeId } = req.params;
     const user = req.decoded.id;
     try{        
