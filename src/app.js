@@ -2,12 +2,21 @@ const express = require("express");
 const { sequelize } = require("./models")
 const app = express();
 const router = require("./routes/index");
+const cors = require('cors');
 
 const port = process.env.PORT || 8080;
 require("dotenv").config();
 
+const corsOptions = {
+    origin : '*',
+    method : ['GET', 'POST', 'PATCH', 'DELETE'],
+    credentials : true,
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors(corsOptions));
 
 app.set("jwt-secret", process.env.SECRET);
 
