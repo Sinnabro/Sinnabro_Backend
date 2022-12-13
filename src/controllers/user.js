@@ -227,10 +227,20 @@ const sendEmail = async (req, res) => {
 
   const { email } = req.body;
 
-  await Verify.create({
-    email,
-    code: number,
+  const emailcode = await Verify.findOne({
+    where: { email },
   });
+
+  if (emailcode) {
+    await emailcode.update({
+      code: number,
+    });
+  } else {
+    await Verify.create({
+      email,
+      code: number,
+    });
+  }
 
   const mailOptions = {
     from: process.env.USEREMAIL,
