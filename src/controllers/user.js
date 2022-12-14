@@ -1,11 +1,17 @@
 const { User, Verify } = require("../models");
 const jwt = require("jsonwebtoken");
 const { Transport } = require("../config/email");
+const crypto = require("crypto");
 
 const signup = async (req, res) => {
   const { email, name, password } = req.body;
 
   try {
+    const salt = crypto.randomBytes(32).toString("hex");
+    const hashPassword = crypto
+      .pbkdf2Sync(password, salt, 2, 32, "sha512")
+      .toString("hex");
+
     const useremail = await User.findOne({
       where: { email },
     });
@@ -19,7 +25,8 @@ const signup = async (req, res) => {
     await User.create({
       email,
       name,
-      password,
+      password: hashPassword,
+      salt,
     });
 
     res.status(201).json({
@@ -69,7 +76,11 @@ const login = async (req, res) => {
       where: { email },
     });
 
-    if (user.password === password) {
+    const hashPassword = crypto
+      .pbkdf2Sync(password, user.salt, 2, 32, "sha512")
+      .toString("hex");
+
+    if (user.password === hashPassword) {
       const accessToken = jwt.sign(
         {
           id: user.id,
@@ -113,6 +124,10 @@ const deleteUser = async (req, res) => {
     where: { email: decodedEmail },
   });
 
+  const hashPassword = crypto
+    .pbkdf2Sync(password, user.salt, 2, 32, "sha512")
+    .toString("hex");
+
   const emailUser = await User.findOne({
     where: { email },
   });
@@ -126,7 +141,7 @@ const deleteUser = async (req, res) => {
         });
       }
       throw Error;
-    } else if (user.password !== password) {
+    } else if (user.password !== hashPassword) {
       return res.status(400).json({
         message: "올바르지 않은 비밀번호입니다.",
       });
@@ -160,17 +175,25 @@ const updatePassword = async (req, res) => {
       },
     });
 
-    if (user.password !== password) {
+    const hashPassword = crypto
+      .pbkdf2Sync(password, user.salt, 2, 32, "sha512")
+      .toString("hex");
+
+    const newhashPassword = crypto
+      .pbkdf2Sync(new_password, user.salt, 2, 32, "sha512")
+      .toString("hex");
+
+    if (user.password !== hashPassword) {
       res.status(400).json({
         message: "현재 비밀번호가 올바르지 않습니다.",
       });
-    } else if (password === new_password) {
+    } else if (hashPassword === newhashPassword) {
       res.status(400).json({
         message: "현재 비밀번호와 같지 않도록 수정하세요.",
       });
     } else {
       await user.update({
-        password: new_password,
+        password: newhashPassword,
       });
 
       res.status(200).json({
@@ -201,8 +224,12 @@ const findPassword = async (req, res) => {
       });
     }
 
+    const newhashPassword = crypto
+      .pbkdf2Sync(new_password, user.salt, 2, 32, "sha512")
+      .toString("hex");
+
     await user.update({
-      password: new_password,
+      password: newhashPassword,
     });
 
     return res.status(200).json({
@@ -251,6 +278,8 @@ const sendEmail = async (req, res) => {
 
   await Transport.sendMail(mailOptions, (error) => {
     if (error) {
+      console.error(error);
+
       res.status(400).json({
         message: "error",
       });
