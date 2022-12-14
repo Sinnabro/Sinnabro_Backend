@@ -1,11 +1,17 @@
 const { User, Verify } = require("../models");
 const jwt = require("jsonwebtoken");
 const { Transport } = require("../config/email");
+const crypto = require("crypto");
 
 const signup = async (req, res) => {
   const { email, name, password } = req.body;
 
   try {
+    const salt = crypto.randomBytes(32).toString("hex");
+    const hashPassword = crypto
+      .pbkdf2Sync(password, salt, 2, 32, "sha512")
+      .toString("hex");
+
     const useremail = await User.findOne({
       where: { email },
     });
@@ -19,7 +25,7 @@ const signup = async (req, res) => {
     await User.create({
       email,
       name,
-      password,
+      password: hashPassword,
     });
 
     res.status(201).json({
@@ -251,6 +257,8 @@ const sendEmail = async (req, res) => {
 
   await Transport.sendMail(mailOptions, (error) => {
     if (error) {
+      console.error(error);
+
       res.status(400).json({
         message: "error",
       });
