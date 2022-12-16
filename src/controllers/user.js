@@ -274,6 +274,184 @@ const sendEmail = async (req, res) => {
     to: email,
     subject: "[SINNABRO] 인증 관련 이메일입니다.",
     text: "오른쪽 숫자 여섯 자리를 입력해주세요 : " + number,
+    html: `<table cellpadding="0" cellspacing="0" border="0">
+    <div style="display: flex; justify-content: center">
+      <div style="margin-top: 3%; width: 600px">
+        <div
+          style="
+            margin-left: 30px;
+            width: 580px;
+            display: flex;
+            align-items: center;
+          "
+        >
+          <img
+            src="https://c11.kr/17hc9"
+            alt="IMGLogo"
+            style="width: 35px; height: 40px"
+          />
+          <img
+            src="https://c11.kr/17hcb"
+            alt="ECLine"
+            style="margin-left: 15px; width: 1px; height: 43px"
+          />
+          <img
+            src="https://c11.kr/17hcc"
+            alt="TTextLogo"
+            style="margin-left: 15px; width: 190px; height: 30px"
+          />
+        </div>
+
+        <div style="margin-top: 40px">
+          <div
+            style="
+              display: flex;
+              font-weight: 600;
+              font-size: 26.5px;
+              font-family: Pretendard;
+              font-style: normal;
+            "
+          >
+            이메일
+            <p
+              style="
+                margin-top: 0px;
+                margin-right: 0px;
+                margin-bottom: 0px;
+                margin-left: 6px;
+                background-color: #fde293;
+                font-weight: 600;
+                font-size: 26.5px;
+                font-family: Pretendard;
+                font-style: normal;
+              "
+            >
+              인증
+            </p>
+            코드
+          </div>
+
+          <div style="margin-top: 40px">
+            <div>
+              <div>
+                <p
+                  style="
+                    font-weight: 500;
+                    font-family: Noto Sans;
+                    font-style: normal;
+                  "
+                >
+                  안녕하세요.
+                </p>
+                <p
+                  style="
+                    font-weight: 500;
+                    margin-top: 22.5px;
+                    font-family: Noto Sans;
+                    font-style: normal;
+                  "
+                >
+                  SinnaBro에서 회원님의 신원을 확인하려면 이메일 주소를
+                  인증해야 합니다.
+                </p>
+                <p
+                  style="
+                    margin: 0;
+                    font-weight: 500;
+                    margin-top: 22.5px;
+                    font-family: Noto Sans;
+                    font-style: normal;
+                  "
+                >
+                  이 코드는 한 번만 사용할 수 있습니다. 다른 사람과 이 코드를
+                  공유하지 마세요.
+                </p>
+                <p
+                  style="
+                    font-weight: 500;
+                    margin-top: 5.6px;
+                    font-family: Noto Sans;
+                    font-style: normal;
+                  "
+                >
+                  만약 코드를 요청하지 않으셨다면 이 이메일을 무시해 주세요.
+                </p>
+              </div>
+
+              <div
+                style="
+                  margin-top: 40px;
+                  height: 150px;
+                  display: flex;
+                  justify-content: center;
+                  background-color: #f9f9fe;
+                  border-width: 1px;
+                  border-color: #d9d9d9;
+                  border-style: solid;
+                  border-radius: 5px;
+                "
+              >
+              <p
+              style="
+                margin-top: 45px;
+                font-size: 52px;
+                font-weight: 400;
+                font-family: Noto Sans;
+                font-style: normal;
+              "
+              
+            >
+
+            ${number}
+
+</p>
+              </div>
+              <div
+                style="
+                  margin-top: 10px;
+                  display: flex;
+                  justify-content: center;
+                  font-size: 20px;
+                  font-weight: 600;
+                  font-family: Pretendard;
+                  font-style: normal;
+                "
+              >
+                이메일
+                <p
+                  style="
+                    margin-top: 0px;
+                    margin-right: 0px;
+                    margin-bottom: 0px;
+                    margin-left: 6px;
+                    background-color: #fde293;
+                    font-size: 20px;
+                    font-weight: 600;
+                    font-family: Pretendard;
+                    font-style: normal;
+                  "
+                >
+                  인증
+                </p>
+                코드
+              </div>
+
+              <p
+                style="
+                  margin-top: 35px;
+                  font-weight: 500;
+                  font-family: Noto Sans;
+                  font-style: normal;
+                "
+              >
+                감사합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </table>`,
   };
 
   await Transport.sendMail(mailOptions, (error) => {
