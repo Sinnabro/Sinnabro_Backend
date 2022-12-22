@@ -37,11 +37,12 @@ const createTime = async(req, res) => {
 const getTime = async(req, res) => {
     const date = req.body.date;
     const user = req.decoded.id;
+    const user_id = req.body.user_Id;
     
     try{
-        const times = await Time.findAll({
+        const times = await Time.findOne({
             where: {
-                user_id: user,
+                user_id,
                 date,
             }
         })
