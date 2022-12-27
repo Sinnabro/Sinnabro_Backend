@@ -63,9 +63,14 @@ const updateTodo = async(req, res) => {
 }
 
 const getTodo = async(req, res) => {
+    const date = req.body.date;
+    const userId = req.body.userId;
     try{
         const todo = await Todo.findAll({
-            where : {date: moment().format('YYYY-MM-DD')}
+            where : {
+                date : moment(date).format('YYYY-MM-DD'),
+                writer: userId,
+            }
         });
         res.status(200).json({
             todo,
