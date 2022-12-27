@@ -29,7 +29,7 @@ const signup = async (req, res) => {
       salt,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "회원가입이 완료되었습니다.",
     });
   } catch (err) {
@@ -117,31 +117,30 @@ const login = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { email, password } = req.body;
-  const token = await req.headers["access-token"];
+  const token =
+    (await req.headers.authorization.split("Bearer ")[1]) || req.query.token;
   const decodedEmail = req.decoded.email;
 
   const user = await User.findOne({
     where: { email: decodedEmail },
   });
 
-  const hashPassword = crypto
-    .pbkdf2Sync(password, user.salt, 2, 32, "sha512")
-    .toString("hex");
-
   const emailUser = await User.findOne({
     where: { email },
   });
-  console.log(user);
 
   try {
-    if (user.email !== email) {
-      if (!emailUser) {
-        return res.status(404).json({
-          message: "존재하지 않는 회원입니다.",
-        });
-      }
-      throw Error;
-    } else if (user.password !== hashPassword) {
+    if (!emailUser) {
+      return res.status(404).json({
+        message: "존재하지 않는 회원입니다.",
+      });
+    }
+
+    const hashPassword = crypto
+      .pbkdf2Sync(password, user.salt, 2, 32, "sha512")
+      .toString("hex");
+
+    if (user.password !== hashPassword) {
       return res.status(400).json({
         message: "올바르지 않은 비밀번호입니다.",
       });
