@@ -5,8 +5,7 @@ const AuthMiddleware = require("../middleware/token");
 const controller = require("../controllers/date");
 
 router.post("/", AuthMiddleware, controller.createDate);
-router.get("/", AuthMiddleware, controller.readDate);
-router.patch("/:id", AuthMiddleware, controller.updateDate);
-router.delete("/:id", AuthMiddleware, controller.deleteDate);
+router.get("/:user_id", AuthMiddleware, controller.readDate);
+router.patch("/:user_id", AuthMiddleware, controller.updateDate);
 
 module.exports = router;
