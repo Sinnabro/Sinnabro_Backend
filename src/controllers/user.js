@@ -1,7 +1,8 @@
-const { User, Verify } = require("../models");
+const { User, Verify, Time } = require("../models");
 const jwt = require("jsonwebtoken");
 const { Transport } = require("../config/email");
 const crypto = require("crypto");
+const { Op } = require("sequelize");
 
 const signup = async (req, res) => {
   const { email, name, password } = req.body;
@@ -502,7 +503,7 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-const mypage = async (req, res) => {
+const MypageUser = async (req, res) => {
   const UserId = req.decoded.id;
 
   try {
@@ -524,6 +525,31 @@ const mypage = async (req, res) => {
   }
 };
 
+const MypageLike = async (req, res) => {
+  const { year, month } = req.body;
+
+  try {
+    const dateList = await Time.findAll({
+      where: {
+        date: { [Op.startsWith]: `${year}-${month}` },
+      },
+      raw: true,
+      attributes: ["date", "like"],
+    });
+
+    return res.status(200).json({
+      message: "월별 스터디 좋아요 수를 조회합니다.",
+      dateList,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(400).json({
+      message: "잘못된 요청입니다.",
+    });
+  }
+};
+
 module.exports = {
   signup,
   namecheck,
@@ -533,5 +559,6 @@ module.exports = {
   findPassword,
   sendEmail,
   verifyEmail,
-  mypage,
+  MypageUser,
+  MypageLike,
 };
