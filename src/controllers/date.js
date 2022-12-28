@@ -1,4 +1,4 @@
-const { Date } = require("../models");
+const { Date, User } = require("../models");
 const moment = require("moment");
 
 const createDate = async (req, res) => {
@@ -10,6 +10,10 @@ const createDate = async (req, res) => {
       where: {
         user_id: UserId,
       },
+    });
+
+    const NameUser = await User.findOne({
+      where: { id: UserId },
     });
 
     if (user) {
@@ -25,6 +29,7 @@ const createDate = async (req, res) => {
 
     await Date.create({
       user_id: UserId,
+      username: NameUser.name,
       dayname,
       date,
       Dday: sub,
@@ -51,6 +56,12 @@ const readDate = async (req, res) => {
         user_id: Id,
       },
     });
+
+    if (!date) {
+      return res.status(404).json({
+        message: "해당 유저는 디데이가 존재하지 않습니다.",
+      });
+    }
 
     return res.status(200).json(date);
   } catch (err) {
