@@ -12,6 +12,7 @@ router.patch("/password", AuthMiddleware, controller.updatePassword);
 router.patch("/find/:email", controller.findPassword);
 router.post("/email", controller.sendEmail);
 router.post("/verify/:email", controller.verifyEmail);
-router.get("/mypage", AuthMiddleware, controller.mypage);
+router.get("/mypage", AuthMiddleware, controller.MypageUser);
+router.get("/mypage/like", AuthMiddleware, controller.MypageLike);
 
 module.exports = router;
