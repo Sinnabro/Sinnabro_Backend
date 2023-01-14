@@ -3,12 +3,11 @@ const { createLike, deleteLike } = require("../middleware/like");
 
 const getLike = async (req, res) => {
   const { timeId } = req.params;
-  const user = req.decoded.id;
+
   try {
     const like = await Like.findOne({
       where: {
         time_id: timeId,
-        user_id: user,
       },
     });
     if (!like)
